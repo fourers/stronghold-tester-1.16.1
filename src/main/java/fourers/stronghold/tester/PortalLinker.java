@@ -43,12 +43,25 @@ public class PortalLinker {
 
         LOGGER.info("Building nether portal at {}", stronghold.toShortString());
         portalForcer.createPortal(dummy);
+
+        unforceLoad(overworld, stronghold);
     }
 
     private static void forceLoad(ServerLevel world, BlockPos pos) {
         ChunkPos chunkPos = new ChunkPos(pos);
 
         world.getChunkSource().addRegionTicket(
+                TicketType.FORCED,
+                chunkPos,
+                5,
+                chunkPos
+        );
+    }
+
+    private static void unforceLoad(ServerLevel world, BlockPos pos) {
+        ChunkPos chunkPos = new ChunkPos(pos);
+
+        world.getChunkSource().removeRegionTicket(
                 TicketType.FORCED,
                 chunkPos,
                 5,

@@ -2,6 +2,8 @@ package fourers.stronghold.tester;
 
 import java.io.File;
 
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.storage.LevelResource;
@@ -22,6 +24,7 @@ public class StrongholdPlayerSpawner {
         if (isNewPlayer(server, player)) {
             LOGGER.info("New player detected: {}", player.getName());
             movePlayer(server, player);
+            setupInventory(player);
         }
     }
 
@@ -42,6 +45,7 @@ public class StrongholdPlayerSpawner {
             return;
         }
 
+        LOGGER.info("Teleporting player to {}", safePos.toShortString());
         player.teleportTo(
             overworld,
             safePos.getX() + 0.5,
@@ -79,5 +83,15 @@ public class StrongholdPlayerSpawner {
         return world.getBlockState(pos.below()).isSolidRender(world, pos.below())
             && world.getBlockState(pos).isAir()
             && world.getBlockState(pos.above()).isAir();
+    }
+
+    private static void setupInventory(ServerPlayer player) {
+        player.inventory.setItem(0, new ItemStack(Items.IRON_PICKAXE)); // hotbar slot 1
+        player.inventory.setItem(1, new ItemStack(Items.IRON_AXE)); // hotbar slot 2
+        player.inventory.setItem(4, new ItemStack(Items.CRYING_OBSIDIAN, 12)); // hotbar slot 5
+        player.inventory.setItem(5, new ItemStack(Items.BLACKSTONE, 64)); // hotbar slot 6
+        player.inventory.setItem(6, new ItemStack(Items.ENDER_EYE, 12)); // hotbar slot 7
+        player.inventory.setItem(7, new ItemStack(Items.ENDER_PEARL, 12)); // hotbar slot 8
+        player.inventory.setItem(8, new ItemStack(Items.COOKED_BEEF, 12)); // hotbar slot 9
     }
 }
