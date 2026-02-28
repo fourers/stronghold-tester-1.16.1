@@ -3,11 +3,14 @@ package fourers.stronghold.tester;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class StrongholdInitializer {
+    public static final String MOD_ID = "stronghold-tester";
+	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public static void register() {
 
@@ -31,25 +34,10 @@ public class StrongholdInitializer {
             return; // Already done
         }
 
-        // 1️⃣ Locate Stronghold
-        BlockPos stronghold = overworld.findNearestMapFeature(
-                StructureFeature.STRONGHOLD,
-                new BlockPos(0, 64, 0),
-                100,
-                false
-        );
-
-        if (stronghold == null) return;
-
-        BlockPos spawnPos = stronghold.offset(2, 1, 2);
-
-        // 2️⃣ Set world spawn
-        overworld.setDefaultSpawnPos(spawnPos);
-
-        // 3️⃣ Setup linked portal pair
+        // Setup linked portal pair
         PortalLinker.setupStrongholdPortalPair(server);
 
-        // 4️⃣ Mark complete
+        // Mark complete
         state.setGenerated();
     }
 }

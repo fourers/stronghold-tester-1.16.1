@@ -19,9 +19,7 @@
 			"fourers.stronghold.tester.StrongholdTester"
 		]
 	},
-	"mixins": [
-		"stronghold-tester.mixins.json"
-	],
+	"mixins": [],
 	"depends": {
 		"fabricloader": ">=0.18.4",
 		"minecraft": "~1.16.1",
