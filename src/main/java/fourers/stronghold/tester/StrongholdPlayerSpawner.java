@@ -4,6 +4,8 @@ import java.io.File;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.storage.LevelResource;
@@ -86,12 +88,29 @@ public class StrongholdPlayerSpawner {
     }
 
     private static void setupInventory(ServerPlayer player) {
+        ItemStack fireResistPotion = PotionUtils.setPotion(
+            new ItemStack(Items.POTION),
+            Potions.FIRE_RESISTANCE
+        );
+
         player.inventory.setItem(0, new ItemStack(Items.IRON_PICKAXE)); // hotbar slot 1
         player.inventory.setItem(1, new ItemStack(Items.IRON_AXE)); // hotbar slot 2
-        player.inventory.setItem(4, new ItemStack(Items.CRYING_OBSIDIAN, 12)); // hotbar slot 5
-        player.inventory.setItem(5, new ItemStack(Items.BLACKSTONE, 64)); // hotbar slot 6
-        player.inventory.setItem(6, new ItemStack(Items.ENDER_EYE, 12)); // hotbar slot 7
-        player.inventory.setItem(7, new ItemStack(Items.ENDER_PEARL, 12)); // hotbar slot 8
-        player.inventory.setItem(8, new ItemStack(Items.COOKED_BEEF, 12)); // hotbar slot 9
+        player.inventory.setItem(2, new ItemStack(Items.BOW)); // hotbar slot 3
+        player.inventory.setItem(3, new ItemStack(Items.CRYING_OBSIDIAN, 12)); // hotbar slot 4
+        player.inventory.setItem(4, new ItemStack(Items.BLACKSTONE, 64)); // hotbar slot 5
+        player.inventory.setItem(5, new ItemStack(Items.ENDER_EYE, 12)); // hotbar slot 6
+        player.inventory.setItem(6, new ItemStack(Items.ENDER_PEARL, 12)); // hotbar slot 7
+        player.inventory.setItem(7, new ItemStack(Items.COOKED_BEEF, 12)); // hotbar slot 8
+        player.inventory.setItem(8, new ItemStack(Items.TORCH, 64)); // hotbar slot 9
+
+        player.inventory.setItem(10, new ItemStack(Items.SPECTRAL_ARROW, 64)); // main inventory slot 1
+        player.inventory.setItem(11, new ItemStack(Items.OAK_PLANKS, 64)); // main inventory slot 2
+        player.inventory.setItem(12, fireResistPotion); // main inventory slot 3
+
+        player.inventory.setItem(36, new ItemStack(Items.IRON_BOOTS)); // boots
+        player.inventory.setItem(37, new ItemStack(Items.IRON_LEGGINGS)); // bottom
+        player.inventory.setItem(38, new ItemStack(Items.IRON_CHESTPLATE)); // top
+        player.inventory.setItem(39, new ItemStack(Items.IRON_HELMET)); // hat
+        player.inventory.setItem(40, new ItemStack(Items.SHIELD)); // offhand
     }
 }
