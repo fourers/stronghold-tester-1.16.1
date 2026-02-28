@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class StrongholdInitializer {
+public class StrongholdInitialiser {
     public static final String MOD_ID = "stronghold-tester";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 

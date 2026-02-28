@@ -21,6 +21,6 @@ public class StrongholdTester implements ModInitializer {
 
 		LOGGER.info("Loading Stronghold Tester...");
 
-		StrongholdInitializer.register();
+		StrongholdInitialiser.register();
 	}
 }

@@ -4,11 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.PortalForcer;
@@ -47,9 +43,6 @@ public class PortalLinker {
 
         LOGGER.info("Building nether portal at {}", stronghold.toShortString());
         portalForcer.createPortal(dummy);
-
-        // Unforce-load chunks
-        unforceLoad(overworld, stronghold);
     }
 
     private static void forceLoad(ServerLevel world, BlockPos pos) {
@@ -58,18 +51,7 @@ public class PortalLinker {
         world.getChunkSource().addRegionTicket(
                 TicketType.FORCED,
                 chunkPos,
-                3,
-                chunkPos
-        );
-    }
-
-    private static void unforceLoad(ServerLevel world, BlockPos pos) {
-        ChunkPos chunkPos = new ChunkPos(pos);
-
-        world.getChunkSource().removeRegionTicket(
-                TicketType.FORCED,
-                chunkPos,
-                3,
+                5,
                 chunkPos
         );
     }
