@@ -95,7 +95,7 @@ public class StrongholdPlayerSpawner {
 
         player.inventory.setItem(0, new ItemStack(Items.IRON_PICKAXE)); // hotbar slot 1
         player.inventory.setItem(1, new ItemStack(Items.IRON_AXE)); // hotbar slot 2
-        player.inventory.setItem(2, new ItemStack(Items.BOW)); // hotbar slot 3
+        player.inventory.setItem(2, new ItemStack(Items.LAVA_BUCKET)); // hotbar slot 3
         player.inventory.setItem(3, new ItemStack(Items.CRYING_OBSIDIAN, 12)); // hotbar slot 4
         player.inventory.setItem(4, new ItemStack(Items.BLACKSTONE, 64)); // hotbar slot 5
         player.inventory.setItem(5, new ItemStack(Items.ENDER_EYE, 12)); // hotbar slot 6
@@ -103,9 +103,12 @@ public class StrongholdPlayerSpawner {
         player.inventory.setItem(7, new ItemStack(Items.COOKED_BEEF, 12)); // hotbar slot 8
         player.inventory.setItem(8, new ItemStack(Items.TORCH, 64)); // hotbar slot 9
 
-        player.inventory.setItem(10, new ItemStack(Items.SPECTRAL_ARROW, 64)); // main inventory slot 1
-        player.inventory.setItem(11, new ItemStack(Items.OAK_PLANKS, 64)); // main inventory slot 2
-        player.inventory.setItem(12, fireResistPotion); // main inventory slot 3
+        player.inventory.setItem(9, new ItemStack(Items.SPECTRAL_ARROW, 64)); // main inventory slot 1
+        player.inventory.setItem(10, new ItemStack(Items.BOW)); // main inventory slot 2
+        player.inventory.setItem(11, fireResistPotion); // main inventory slot 3
+        player.inventory.setItem(12, new ItemStack(Items.OAK_PLANKS, 64)); // main inventory slot 4
+        player.inventory.setItem(12, new ItemStack(Items.WHITE_WOOL, 18)); // main inventory slot 5
+
 
         player.inventory.setItem(36, new ItemStack(Items.IRON_BOOTS)); // boots
         player.inventory.setItem(37, new ItemStack(Items.IRON_LEGGINGS)); // bottom
