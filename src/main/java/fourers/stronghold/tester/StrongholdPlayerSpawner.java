@@ -108,7 +108,7 @@ public class StrongholdPlayerSpawner {
         player.inventory.setItem(11, fireResistPotion); // main inventory slot 3
         player.inventory.setItem(12, new ItemStack(Items.OAK_PLANKS, 64)); // main inventory slot 4
         player.inventory.setItem(13, new ItemStack(Items.WHITE_WOOL, 18)); // main inventory slot 5
-        player.inventory.setItem(14, new ItemStack(Items.GLOWSTONE_DUST, 6)); // main inventory slot 6
+        player.inventory.setItem(14, new ItemStack(Items.GLOWSTONE, 6)); // main inventory slot 6
         player.inventory.setItem(15, new ItemStack(Items.DIRT, 64)); // main inventory slot 7
 
         player.inventory.setItem(36, new ItemStack(Items.IRON_BOOTS)); // boots
