@@ -3,7 +3,7 @@
 	"package": "fourers.stronghold.tester.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"ServerPlayNetworkHandlerMixin"
+		"StrongholdPlayerTickMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

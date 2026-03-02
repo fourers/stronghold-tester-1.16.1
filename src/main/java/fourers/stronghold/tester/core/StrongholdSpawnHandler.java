@@ -1,7 +1,9 @@
-package fourers.stronghold.tester;
+package fourers.stronghold.tester.core;
 
-import java.io.File;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -9,50 +11,47 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.storage.LevelResource;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+
+import java.io.File;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class StrongholdPlayerSpawner {
-    public static final String MOD_ID = "stronghold-tester";
-	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+public class StrongholdSpawnHandler {
 
-    public static void onPlayerJoin(ServerPlayer player) {
+    private static final String MOD_ID = "stronghold-tester";
+	private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
+    public static void clientTick(ServerPlayer player) {
         MinecraftServer server = player.server;
         if (isNewPlayer(server, player)) {
             LOGGER.info("New player detected: {}", player.getName());
-            movePlayer(server, player);
-            setupInventory(player);
+            movePlayerToStronghold(server, player);
+            setupLoadout(player);
         }
     }
 
-    private static void movePlayer(MinecraftServer server, ServerPlayer player) {
+    private static void movePlayerToStronghold(MinecraftServer server, ServerPlayer player) {
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
-        BlockPos stronghold = overworld.findNearestMapFeature(
-            StructureFeature.STRONGHOLD,
-            new BlockPos(0, 64, 0),
-            100,
-            false
-        );
 
-        if (stronghold == null) return;
+        BlockPos pos = getNetherPortalFromGameState(overworld);
 
-        BlockPos safePos = findSafePos(overworld, stronghold);
-        if (safePos == null) {
-            LOGGER.warn("No safe position found near stronghold!");
+        if (pos == null) {
+            LOGGER.warn("Unable to retrieve portal location from game state");
+            pos = getNearestStrongholdSafeSpot(overworld);
+        }
+
+        if (pos == null) {
+            LOGGER.warn("Unable to find safe spot near stronghold");
             return;
         }
 
-        LOGGER.info("Teleporting player to {}", safePos.toShortString());
+        LOGGER.info("Teleporting player to {}", pos.toShortString());
         player.teleportTo(
             overworld,
-            safePos.getX() + 0.5,
-            safePos.getY(),
-            safePos.getZ() + 0.5,
+            pos.getX() + 0.5,
+            pos.getY(),
+            pos.getZ() + 0.5,
             player.yRot,
             player.xRot
         );
@@ -64,6 +63,32 @@ public class StrongholdPlayerSpawner {
             player.getStringUUID() + ".dat"
         );
         return !playerDataDir.exists();
+    }
+
+    private static BlockPos getNetherPortalFromGameState(ServerLevel world) {
+        StrongholdWorldState state = world.getDataStorage()
+            .get(
+                StrongholdWorldState::new,
+                "stronghold_spawn_state"
+            );
+        return state.getPortal();
+    }
+
+    private static BlockPos getNearestStrongholdSafeSpot(ServerLevel world) {
+        BlockPos stronghold = world.findNearestMapFeature(
+            StructureFeature.STRONGHOLD,
+            new BlockPos(0, 64, 0),
+            100,
+            false
+        );
+
+        if (stronghold == null) return null;
+
+        BlockPos safePos = findSafePos(world, stronghold);
+        if (safePos == null) {
+            LOGGER.warn("No safe position found near stronghold!");
+        }
+        return safePos;
     }
 
     private static BlockPos findSafePos(ServerLevel world, BlockPos target) {
@@ -87,7 +112,7 @@ public class StrongholdPlayerSpawner {
             && world.getBlockState(pos.above()).isAir();
     }
 
-    private static void setupInventory(ServerPlayer player) {
+    private static void setupLoadout(ServerPlayer player) {
         ItemStack fireResistPotion = PotionUtils.setPotion(
             new ItemStack(Items.POTION),
             Potions.FIRE_RESISTANCE
@@ -110,6 +135,7 @@ public class StrongholdPlayerSpawner {
         player.inventory.setItem(13, new ItemStack(Items.WHITE_WOOL, 18)); // main inventory slot 5
         player.inventory.setItem(14, new ItemStack(Items.GLOWSTONE, 6)); // main inventory slot 6
         player.inventory.setItem(15, new ItemStack(Items.DIRT, 64)); // main inventory slot 7
+        player.inventory.setItem(16, new ItemStack(Items.WATER_BUCKET)); // main inventory slot 8
 
         player.inventory.setItem(36, new ItemStack(Items.IRON_BOOTS)); // boots
         player.inventory.setItem(37, new ItemStack(Items.IRON_LEGGINGS)); // bottom

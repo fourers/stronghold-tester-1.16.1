@@ -1,5 +1,6 @@
 package fourers.stronghold.tester;
 
+import fourers.stronghold.tester.core.StrongholdInitialiser;
 import net.fabricmc.api.ModInitializer;
 
 import org.apache.logging.log4j.LogManager;
