@@ -38,9 +38,10 @@ public class StrongholdSpawnHandler {
 
         if (pos == null) {
             LOGGER.warn("Unable to retrieve portal location from game state");
-            pos = getNearestStrongholdSafeSpot(overworld);
+            pos = getNearestStronghold(overworld);
         }
 
+        pos = findSafePos(overworld, pos);
         if (pos == null) {
             LOGGER.warn("Unable to find safe spot near stronghold");
             return;
@@ -74,21 +75,13 @@ public class StrongholdSpawnHandler {
         return state.getPortal();
     }
 
-    private static BlockPos getNearestStrongholdSafeSpot(ServerLevel world) {
-        BlockPos stronghold = world.findNearestMapFeature(
+    private static BlockPos getNearestStronghold(ServerLevel world) {
+        return world.findNearestMapFeature(
             StructureFeature.STRONGHOLD,
             new BlockPos(0, 64, 0),
             100,
             false
         );
-
-        if (stronghold == null) return null;
-
-        BlockPos safePos = findSafePos(world, stronghold);
-        if (safePos == null) {
-            LOGGER.warn("No safe position found near stronghold!");
-        }
-        return safePos;
     }
 
     private static BlockPos findSafePos(ServerLevel world, BlockPos target) {

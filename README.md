@@ -14,5 +14,6 @@ The player is also given a loadout (e.g. ender eyes, iron gear) to assist with n
 ## Recommended Mods
 
 - Sodium (for improved lighting options)
-- Speedrun API (used by Standard Settings)
+- Speedrun API (used by Speedrun IGT, Standard Settings)
+- Speedrun IGT (for in-game timer of test run)
 - Standard Settings (for keeping settings across world creations)

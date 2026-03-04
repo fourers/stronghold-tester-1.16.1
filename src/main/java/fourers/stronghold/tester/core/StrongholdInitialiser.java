@@ -44,23 +44,22 @@ public class StrongholdInitialiser {
 
     private static BlockPos createPortalAtStronghold(ServerLevel level) {
         CustomPortalForcer portalForcer = new CustomPortalForcer(level);
-        BlockPos stronghold = level.findNearestMapFeature(
-                StructureFeature.STRONGHOLD,
-                new BlockPos(0, 64, 0),
-                100,
-                false
-        );
+        BlockPos stronghold = getNearestStronghold(level);
         return portalForcer.createPortal(stronghold);
     }
 
     private static void setDefaultSpawn(MinecraftServer server) {
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
-        BlockPos stronghold = overworld.findNearestMapFeature(
+        BlockPos stronghold = getNearestStronghold(overworld);
+        overworld.setDefaultSpawnPos(stronghold);
+    }
+
+    private static BlockPos getNearestStronghold(ServerLevel level) {
+        return level.findNearestMapFeature(
             StructureFeature.STRONGHOLD,
             new BlockPos(0, 64, 0),
             100,
             false
         );
-        overworld.setDefaultSpawnPos(stronghold);
     }
 }
