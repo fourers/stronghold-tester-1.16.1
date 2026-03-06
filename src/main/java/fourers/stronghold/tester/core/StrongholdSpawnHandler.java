@@ -9,10 +9,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.storage.LevelResource;
-
-import java.io.File;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,48 +18,37 @@ public class StrongholdSpawnHandler {
     private static final String MOD_ID = "stronghold-tester";
 	private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
-    public static void clientTick(ServerPlayer player) {
-        MinecraftServer server = player.server;
-        if (isNewPlayer(server, player)) {
-            LOGGER.info("New player detected: {}", player.getName());
-            movePlayerToStronghold(server, player);
-            setupLoadout(player);
-        }
+    public static void handleNewPlayer(ServerPlayer player) {
+        LOGGER.info("New player detected: {}", player.getName());
+        movePlayerToStronghold(player.server, player);
+        setupLoadout(player);
     }
 
     private static void movePlayerToStronghold(MinecraftServer server, ServerPlayer player) {
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
 
-        BlockPos pos = getNetherPortalFromGameState(overworld);
+        BlockPos stronghold = getNetherPortalFromGameState(overworld);
 
-        if (pos == null) {
+        if (stronghold == null) {
             LOGGER.warn("Unable to retrieve portal location from game state");
-            pos = getNearestStronghold(overworld);
-        }
-
-        pos = findSafePos(overworld, pos);
-        if (pos == null) {
-            LOGGER.warn("Unable to find safe spot near stronghold");
             return;
         }
 
-        LOGGER.info("Teleporting player to {}", pos.toShortString());
+        BlockPos safeSpot = findSafePos(overworld, stronghold);
+        if (safeSpot == null) {
+            LOGGER.warn("Unable to find safe spot near stronghold at {}", stronghold);
+            return;
+        }
+
+        LOGGER.info("Teleporting player to {}", safeSpot.toShortString());
         player.teleportTo(
             overworld,
-            pos.getX() + 0.5,
-            pos.getY(),
-            pos.getZ() + 0.5,
+            safeSpot.getX() + 0.5,
+            safeSpot.getY(),
+            safeSpot.getZ() + 0.5,
             player.yRot,
             player.xRot
         );
-    }
-
-    private static boolean isNewPlayer(MinecraftServer server, ServerPlayer player) {
-        File playerDataDir = new File(
-            server.getWorldPath(LevelResource.PLAYER_DATA_DIR).toFile(),
-            player.getStringUUID() + ".dat"
-        );
-        return !playerDataDir.exists();
     }
 
     private static BlockPos getNetherPortalFromGameState(ServerLevel world) {
@@ -73,15 +58,6 @@ public class StrongholdSpawnHandler {
                 "stronghold_spawn_state"
             );
         return state.getPortal();
-    }
-
-    private static BlockPos getNearestStronghold(ServerLevel world) {
-        return world.findNearestMapFeature(
-            StructureFeature.STRONGHOLD,
-            new BlockPos(0, 64, 0),
-            100,
-            false
-        );
     }
 
     private static BlockPos findSafePos(ServerLevel world, BlockPos target) {
